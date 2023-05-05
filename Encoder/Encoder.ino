@@ -2,11 +2,14 @@ volatile unsigned int temp, counter = 0; // This variable will increase or decre
 
 #include <Keyboard.h>
 
-#define encoderPinA 0
-#define encoderPinB 3
-#define x_button 4
-#define y_button 5
-#define z_button 6
+#define encoderPinA 3
+#define encoderPinB 0
+#define x_button 15
+#define y_button 14
+#define z_button 16
+#define z_out A2
+#define y_out 9
+#define x_out A0
 
 
 int lastButtonPushed = 0;
@@ -25,28 +28,44 @@ void setup()
       pinMode(y_button, INPUT_PULLUP);
       pinMode(z_button, INPUT_PULLUP);
 
+      pinMode(z_out, OUTPUT);
+      pinMode(y_out, OUTPUT);
+      pinMode(x_out, OUTPUT);
+
       // A rising pulse from encodenren activated ai0(). AttachInterrupt 0 is DigitalPin nr 2 on moust Arduino.
-      attachInterrupt(digitalPinToInterrupt(0), ai0, RISING);
+      attachInterrupt(digitalPinToInterrupt(encoderPinA), ai0, RISING);
 
       // B rising pulse from encodenren activated ai1(). AttachInterrupt 1 is DigitalPin nr 3 on moust Arduino.
-      attachInterrupt(digitalPinToInterrupt(3), ai1, RISING);
+      attachInterrupt(digitalPinToInterrupt(encoderPinB), ai1, RISING);
 
       // attach the interrupt to the x button it will go LOW when pressed
-      attachInterrupt(digitalPinToInterrupt(4), x_button_pressed, LOW);
+      //attachInterrupt(digitalPinToInterrupt(x_button), x_button_pressed, FALLING);
 
       // attach the interrupt to the y button it will go LOW when pressed
-      attachInterrupt(digitalPinToInterrupt(5), y_button_pressed, LOW);
+      //attachInterrupt(digitalPinToInterrupt(y_button), y_button_pressed, FALLING);
 
       // attach the interrupt to the z button it will go LOW when pressed
-      attachInterrupt(digitalPinToInterrupt(6), z_button_pressed, LOW);
+      //attachInterrupt(digitalPinToInterrupt(z_button), z_button_pressed, FALLING);
 
 }
 void loop()
 {
-
+      //Serial.println(lastButtonPushed);
       // check if the x button is pressed
 
+      if(digitalRead(x_button) == LOW) {
+        x_button_pressed();
+      }
 
+            if(digitalRead(y_button) == LOW) {
+        y_button_pressed();
+      }
+
+            if(digitalRead(z_button) == LOW) {
+        z_button_pressed();
+      }
+
+      
       // Send the value of counter
       if (counter != temp)
       {
@@ -57,16 +76,29 @@ void loop()
 
 void x_button_pressed()
 {
+      Serial.println(1);
       lastButtonPushed = 1;
+      analogWrite(x_out, 255);
+      digitalWrite(y_out, LOW);
+      analogWrite(z_out, 0);
+
 }
 
 void y_button_pressed()
 {
+      Serial.println(2);
+      analogWrite(x_out, 0);
+      digitalWrite(y_out, HIGH);
+      analogWrite(z_out, 0);
       lastButtonPushed = 2;
 }
 
 void z_button_pressed()
 {
+      Serial.println(3);
+      analogWrite(x_out, 0);
+      digitalWrite(y_out, LOW);
+      analogWrite(z_out, 255);
       lastButtonPushed = 3;
 }
 
@@ -114,12 +146,12 @@ void ai0()
       if (digitalRead(encoderPinB) == LOW)
       {
             // move left, up, page up
-            move1();
+            //move2();
       }
       else
       {
             // move right, down, page down
-            move2();            
+            //move1();            
       }
 }
 
