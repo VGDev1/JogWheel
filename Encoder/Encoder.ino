@@ -114,8 +114,8 @@ void move1() {
                   Keyboard.release(KEY_UP_ARROW);
                   break;
             case 3:
-                  Keyboard.press(KEY_PAGE_UP); // page up
-                  Keyboard.release(KEY_PAGE_UP);
+                  Keyboard.press(KEY_PAGE_DOWN); // page up
+                  Keyboard.release(KEY_PAGE_DOWN);
                   break;
             }
 }
@@ -132,8 +132,8 @@ void move2() {
                   Keyboard.release(KEY_DOWN_ARROW);
                   break;
             case 3:
-                  Keyboard.press(KEY_PAGE_DOWN); // page down
-                  Keyboard.release(KEY_PAGE_DOWN);
+                  Keyboard.press(KEY_PAGE_UP); // page down
+                  Keyboard.release(KEY_PAGE_UP);
                   break;
             }
 }
